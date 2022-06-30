@@ -3,6 +3,7 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
+const routes = require('./routes')
 const app = express()
 const PORT = 3000
 
@@ -15,9 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
 // Routes
-app.get('/', (req, res) => {
-  res.send('Todo-List with MySQL.')
-})
+app.use(routes)
 
 // Server
 app.listen(PORT, (req, res) => {
