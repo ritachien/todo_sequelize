@@ -1,8 +1,16 @@
 const express = require('express')
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  res.render('index')
+const db = require('../../models')
+const Todo = db.Todo
+
+router.get('/', async (req, res) => {
+  try {
+    const todos = await Todo.findAll({ raw: true, nest: true })
+    return res.render('index', { todos })
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 module.exports = router
