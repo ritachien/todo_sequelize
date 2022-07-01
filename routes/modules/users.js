@@ -3,7 +3,7 @@ const router = express.Router()
 
 // Login
 router.get('/login', (req, res) => {
-  res.send('/users/login')
+  res.render('login')
 })
 
 router.post('/login', (req, res) => {
@@ -12,12 +12,12 @@ router.post('/login', (req, res) => {
 
 // Logout
 router.get('/logout', (req, res) => {
-  res.send('/users/logout')
+  res.redirect('/users/login')
 })
 
 // Register
 router.get('/register', (req, res) => {
-  res.send('/users/register')
+  res.render('register')
 })
 
 router.post('/register', (req, res) => {
