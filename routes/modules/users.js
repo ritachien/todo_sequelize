@@ -1,4 +1,5 @@
 const express = require('express')
+const bcrypt = require('bcryptjs')
 const router = express.Router()
 
 const db = require('../../models')
@@ -27,7 +28,34 @@ router.get('/register', (req, res) => {
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body
-    await User.create({ name, email, password })
+
+    // Check if user exists
+    const user = await User.findOne({ where: { email } })
+    if (user) {
+      console.log('User already exists.')
+      return res.render('register', {
+        name,
+        email,
+        password,
+        confirmPassword
+      })
+    }
+    // Check if password equals to confirmPassword
+    if (password !== confirmPassword) {
+      console.log('Password and confirmPassword should be the same.')
+      return res.render('register', {
+        name,
+        email,
+        password,
+        confirmPassword
+      })
+    }
+    // Register a new user
+    await User.create({
+      name,
+      email,
+      password: bcrypt.hashSync(password, 10)
+    })
     res.redirect('/')
   } catch (err) {
     console.log(err)
