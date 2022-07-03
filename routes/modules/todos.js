@@ -30,5 +30,30 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// Update todo
+router.get('/:id/edit', async (req, res) => {
+  const id = req.params.id
+
+  try {
+    const todo = await Todo.findByPk(id)
+    res.render('edit', { todo: todo.toJSON() })
+  } catch (err) { console.log(err) }
+
+})
+
+router.put('/:id', async (req, res) => {
+  const UserId = req.user.id
+  const id = req.params.id
+  const { name, isDone } = req.body
+
+  try {
+    await Todo.update(
+      { name, isDone: isDone === 'on' },
+      { where: { UserId, id } }
+    )
+    return res.redirect(`/todos/${id}`)
+  } catch (err) { console.log(err) }
+})
+
 
 module.exports = router
