@@ -27,7 +27,7 @@ router.get('/logout', (req, res) => {
 
 // Register
 router.get('/register', (req, res) => {
-  res.render('register')
+  res.render('account')
 })
 
 router.post('/register', async (req, res) => {
@@ -46,7 +46,7 @@ router.post('/register', async (req, res) => {
     }
     // If fit any cases above
     if (errors.length) {
-      return res.render('register', {
+      return res.render('account', {
         errors,
         name,
         email,
@@ -60,7 +60,7 @@ router.post('/register', async (req, res) => {
     // Case: If email is registered
     if (user) {
       errors.push({ message: '這個 Email 已經註冊過了。' })
-      return res.render('register', {
+      return res.render('account', {
         errors,
         name,
         email,
