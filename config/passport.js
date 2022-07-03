@@ -13,18 +13,20 @@ module.exports = app => {
   app.use(passport.session())
 
   // LocalStrategy setting
-  passport.use(new LocalStrategy({ usernameField: 'email' },
-    async (email, password, done) => {
+  passport.use(new LocalStrategy({ usernameField: 'email', passReqToCallback: true, },
+    async (req, email, password, done) => {
       try {
         // Check email
         const user = await User.findOne({ where: { email } })
         if (!user) {
-          return done(null, false, { message: 'Email is not registered!' })
+          req.flash('warning_msg', 'Email is not registered!')
+          return done(null, false)
         }
         // Check password
         const isMatch = bcrypt.compareSync(password, user.password)
         if (!isMatch) {
-          return done(null, false, { message: 'Password incorrect.' })
+          req.flash('warning_msg', 'Email or Password incorrect.')
+          return done(null, false)
         }
         // Login success
         return done(null, user)
